@@ -1,29 +1,114 @@
-const express = require('express');
-const app = express();
+const http = require('http');
 const path = require('path');
-const router = express.Router();
+const fs = require('fs');
+const PORT = 3000;
+const hostname = 'localhost';
 
-router.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/index.html'));
-  //__dirname : It will resolve to your project folder.
-});
+// createServer is an http method used to create a web server that takes a callback function
 
-router.get('/home.html',function(req,res){
-  res.sendFile(path.join(__dirname+'/home.html'));
-  //__dirname : It will resolve to your project folder.
-});
+const httpServer = http.createServer(serverHandler);
 
 
-router.get('/about.html',function(req,res){
-  res.sendFile(path.join(__dirname+'/about.html'));
-});
+  // callback function definition
 
-router.get('/contact.html',function(req,res){
-  res.sendFile(path.join(__dirname+'/contact.html'));
-});
+  function serverHandler(req, res)  {
 
-//add the router
-app.use('/', router);
-app.listen(process.env.port || 3000);
 
-console.log('Running at Port 3000');
+
+
+// Get method for index.html route
+
+    if(req.method === 'GET' && req.url === '/') {
+      let filePath = path.resolve(__dirname, 'routes/index.html')
+      let fileExists = fs.existsSync(filePath);
+
+    // if route doesn't exist, return error...
+      if (!fileExists) {
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/html');
+        res.end(`
+          <html>
+            <body>
+              <h3>Page not found</h3>
+            </body>
+          </html>`)
+
+          // if route exist, return the specified route.
+      } else {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/html');
+        fs.createReadStream(filePath).pipe(res);
+      }
+    }
+
+    // Get method for about.html route
+    
+    if(req.method === 'GET' && req.url === '/about.html') {
+      let filePath = path.resolve(__dirname, 'routes/about.html')
+      let fileExists = fs.existsSync(filePath);
+      if (!fileExists) {
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/html');
+        res.end(`
+          <html>
+            <body>
+              <h3>Page not found</h3>
+            </body>
+          </html>`)
+      } else {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/html');
+        fs.createReadStream(filePath).pipe(res);
+      }
+    }
+
+    // Get method for the contact.html route
+
+    if(req.method === 'GET' && req.url === '/contact.html') {
+      let filePath = path.resolve(__dirname, 'routes/contact.html')
+      let fileExists = fs.existsSync(filePath);
+      if (!fileExists) {
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/html');
+        res.end(`
+          <html>
+            <body>
+              <h3>Page not found</h3>
+            </body>
+          </html>`)
+      } else {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/html');
+        fs.createReadStream(filePath).pipe(res);
+      }
+    }
+
+    // Get method for home.html route
+
+    if(req.method === 'GET' && req.url === '/home.html') {
+      let filePath = path.resolve(__dirname, 'routes/home.html')
+      let fileExists = fs.existsSync(filePath);
+      if (!fileExists) {
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/html');
+        res.end(`
+          <html>
+            <body>
+              <h3>Page not found</h3>
+            </body>
+          </html>`)
+      } else {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/html');
+        fs.createReadStream(filePath).pipe(res);
+      }
+    }
+  }
+
+  // httpServer.listen method that takes the PORT number, and hostname already defined, and prints a Server running statement.
+
+  httpServer.listen(PORT, hostname, () => {
+      console.log(`Server running at ${hostname}:${PORT}`);
+
+
+  })
